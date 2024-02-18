@@ -42,10 +42,9 @@ def publish(client, topic, datasource, delay):
 
 def run():
     # Prepare mqtt client
-    time.sleep(5)
     client = connect_mqtt(config.MQTT_BROKER_HOST, config.MQTT_BROKER_PORT)
     # Prepare datasource
-    datasource = FileDatasource("data/data.csv", "data/gps_data.csv")
+    datasource = FileDatasource("data/accelerometer.csv", "data/gps.csv")
     # Infinity publish data
     publish(client, config.MQTT_TOPIC, datasource, config.DELAY)
 
