@@ -47,7 +47,7 @@ class StoreApiAdapter(StoreGateway):
         try:
             json_data = [processed_data.dict() for processed_data in data]
             response = requests.post(url, json=json_data)
-            if response.status_code == 201:
+            if response.status_code >= 200 and response.status_code < 300:
                 return True
             else:
                 logging.error(f"Failed to save data. Status code: {response.status_code}")
