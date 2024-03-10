@@ -32,7 +32,7 @@ class FileDatasource:
 
             timestamp = datetime.now()
 
-            return AggregatedData(accelerometer, gps, timestamp)
+            return AggregatedData(config.USER_ID, accelerometer, gps, timestamp)
         except Exception as e:
             print(f"Error while reading data from sensors: {e}")
 
