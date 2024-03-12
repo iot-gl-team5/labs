@@ -39,18 +39,33 @@ class StoreApiAdapter(StoreGateway):
             logging.error(f"Error occurred: {e}")
             return False
 
+    def __processed_agent_data_list_to_list_of_dict(self, processed_agent_data_list: List[ProcessedAgentData]) -> str:
+        """
+        Convert a list of ProcessedAgentData to a JSON string.
+        """
+        processed_data = []
+        for data in processed_agent_data_list:
+            processed_data.append(data.dict())
+
+        for data in processed_data:
+            data['agent_data']['timestamp'] = data['agent_data']['timestamp'].isoformat()
+
+        return processed_data
+
     def send_data(self, data: List[ProcessedAgentData]) -> bool:
         """
         Send the accumulated data to the Store API.
         """
-        url = f"{self.api_base_url}/agent_data"
+        url = f"{self.api_base_url}/processed_agent_data"
         try:
-            json_data = [processed_data.dict() for processed_data in data]
-            response = requests.post(url, json=json_data)
+            json_data = self.__processed_agent_data_list_to_list_of_dict(data)
+            json_data_str = str(json.dumps(json_data, indent=4))
+            response = requests.post(url, data=json_data_str, headers={"Content-Type": "application/json"})
+
             if response.status_code >= 200 and response.status_code < 300:
                 return True
             else:
-                logging.error(f"Failed to save data. Status code: {response.status_code}")
+                logging.error(f"Failed to save data. Status code: {response.status_code}, URL: {url}")
                 return False
         except Exception as e:
             logging.error(f"Error occurred: {e}")
