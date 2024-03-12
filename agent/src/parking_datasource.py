@@ -29,13 +29,11 @@ class ParkingDatasource:
 
     def startReading(self, *args, **kwargs):
         """Method is called before reading data from sensors"""
-        for reader in self.readers.values():
-            reader.startReading()
+        self.reader.startReading()
 
     def stopReading(self, *args, **kwargs):
         """Method is called after reading data from sensors"""
-        for reader in self.readers.values():
-            reader.stopReading()
+        self.reader.stopReading()
 
 class CSVParkingDatasourceReader:
     filename: str

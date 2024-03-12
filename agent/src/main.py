@@ -4,6 +4,7 @@ import time
 from schema.aggregated_data_schema import AggregatedDataSchema
 from schema.aggregated_parking_schema import AggregatedParkingSchema
 from file_datasource import FileDatasource
+from parking_datasource import ParkingDatasource
 import config
 
 
@@ -45,7 +46,7 @@ def run():
     client = connect_mqtt(config.MQTT_BROKER_HOST, config.MQTT_BROKER_PORT)
     # Prepare datasource
     datasource = FileDatasource("data/accelerometer.csv", "data/gps.csv")
-    parking_datasource = FileDatasource("data/parking.csv")
+    parking_datasource = ParkingDatasource("data/parking.csv")
     # Infinity publish data
     while True:
         publish(client, config.MQTT_TOPIC, datasource, config.DELAY, AggregatedDataSchema)
