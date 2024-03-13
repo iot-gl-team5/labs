@@ -56,7 +56,7 @@ class StoreApiAdapter(StoreGateway):
         """
         Send the accumulated data to the Store API.
         """
-        url = f"{self.api_base_url}/processed_agent_data"
+        url = f"{self.api_base_url}/processed_agent_data/"
         try:
             json_data = self.__processed_agent_data_list_to_list_of_dict(data)
             json_data_str = str(json.dumps(json_data, indent=4))

@@ -29,6 +29,22 @@ class ProcessedAgentData(BaseModel):
                 "Invalid timestamp format."
             )
 
+# tipical receive is: {'road_state': 'large pits', 'agent_data': {'user_id': 1,
+# 'accelerometer': {'x': -16569.0, 'y': -1653.0, 'z': -3967.0}, 
+# 'gps': {'latitude': 30.516823703248743, 'longitude': 50.454483843951586}, 
+# 'timestamp': '2024-03-13T15:51:08.732695'}}
+def received_dict_to_processed_agent_data(received_dict):
+    return ProcessedAgentData(
+        road_state=received_dict["road_state"],
+        user_id=received_dict["agent_data"]["user_id"],
+        x=received_dict["agent_data"]["accelerometer"]["x"],
+        y=received_dict["agent_data"]["accelerometer"]["y"],
+        z=received_dict["agent_data"]["accelerometer"]["z"],
+        latitude=received_dict["agent_data"]["gps"]["latitude"],
+        longitude=received_dict["agent_data"]["gps"]["longitude"],
+        timestamp=received_dict["agent_data"]["timestamp"],
+    )
+
 
 class Datasource:
     def __init__(self, user_id: int):
@@ -60,21 +76,13 @@ class Datasource:
                     Logger.debug("SERVER DISCONNECT")
 
     def handle_received_data(self, data):
-        Logger.debug(f"Received data: {json.loads(data)}")
-        processed_agent_data_list = sorted(
-            [
-                ProcessedAgentData(**processed_data_json)
-                for processed_data_json in json.loads(data)
-            ],
-            key=lambda v: v.timestamp,
-        )
-        ##TODO: check it out
+        Logger.info(f"Received data: {data}")
+        processed_agent_data = received_dict_to_processed_agent_data(data)
         new_points = [
             (
                 processed_agent_data.longitude,
                 processed_agent_data.latitude,
                 processed_agent_data.road_state,
             )
-            for processed_agent_data in processed_agent_data_list
         ]
         self._new_points.extend(new_points)
