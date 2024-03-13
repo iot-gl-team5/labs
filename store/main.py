@@ -113,12 +113,21 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
     except WebSocketDisconnect:
         subscriptions[user_id].remove(websocket)
 
+def __processed_agent_data_to_dict(processed_agent_data: ProcessedAgentData) -> str:
+    """
+    Convert a list of ProcessedAgentData to a JSON string.
+    """
+    processed_data_dict = processed_agent_data.dict()
+    processed_data_dict['agent_data']['timestamp'] = processed_data_dict['agent_data']['timestamp'].isoformat()
+
+    return processed_data_dict
+
 
 # Function to send data to subscribed users
 async def send_data_to_subscribers(user_id: int, data):
     if user_id in subscriptions:
         for websocket in subscriptions[user_id]:
-            await websocket.send_json(json.dumps(data))
+            await websocket.send_json(__processed_agent_data_to_dict(data))
 
 
 # FastAPI CRUDL endpoints
@@ -143,7 +152,7 @@ async def create_processed_agent_data(data: List[ProcessedAgentData]):
                 result = db.execute(query)
                 db.commit()
                 
-                await send_data_to_subscribers(item.agent_data.user_id, result)
+                await send_data_to_subscribers(item.agent_data.user_id, item)
             except Exception as e:
                 db.rollback()
                 raise e
