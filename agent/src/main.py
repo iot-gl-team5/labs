@@ -7,7 +7,6 @@ from file_datasource import FileDatasource
 from parking_datasource import ParkingDatasource
 import config
 
-
 def connect_mqtt(broker, port):
     """Create MQTT client"""
     print(f"CONNECT TO {broker}:{port}")
