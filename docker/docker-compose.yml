@@ -5,8 +5,8 @@ services:
     container_name: mqtt
     volumes:
       - ./mosquitto:/mosquitto
-      - ./mosquitto/data:/mosquitto/data
-      - ./mosquitto/log:/mosquitto/log
+#      - ./mosquitto/data:/mosquitto/data
+#      - ./mosquitto/log:/mosquitto/log
     ports:
       - 1883:1883
       - 9001:9001
@@ -104,6 +104,7 @@ services:
       MQTT_BROKER_HOST: "mqtt"
       MQTT_BROKER_PORT: 1883
       MQTT_TOPIC: "agent_data_topic"
+      MQTT_PARKINGTOPIC: "agent_parking_data_topic"
       DELAY: 0.1
     networks:
       common:
