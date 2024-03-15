@@ -26,9 +26,7 @@ def connect_mqtt(broker, port):
     return client
 
 
-def publish(client, topic, datasource, delay, schema_type):
-    datasource.startReading()
-    time.sleep(delay)
+def publish(client, topic, datasource, schema_type):
     data = datasource.read()
     msg = schema_type().dumps(data)
     result = client.publish(topic, msg)
@@ -47,10 +45,13 @@ def run():
     # Prepare datasource
     datasource = FileDatasource("data/accelerometer.csv", "data/gps.csv")
     parking_datasource = ParkingDatasource("data/parking.csv")
+    datasource.startReading();
+    parking_datasource.startReading();
     # Infinity publish data
     while True:
-        publish(client, config.MQTT_TOPIC, datasource, config.DELAY, AggregatedDataSchema)
-        publish(client, config.MQTT_PARKINGTOPIC, parking_datasource, config.DELAY, AggregatedParkingSchema)
+        publish(client, config.MQTT_TOPIC, datasource, AggregatedDataSchema)
+        publish(client, config.MQTT_PARKINGTOPIC, parking_datasource, AggregatedParkingSchema)
+        time.sleep(config.DELAY)
 
 
 if __name__ == "__main__":

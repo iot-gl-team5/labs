@@ -54,9 +54,8 @@ class CSVParkingDatasourceReader:
             row = next(self.reader, None)
 
         # return self.schema.load(row)
-        columnList = row.split(',')
-        empty_count = columnList[0]
-        gps = Gps(columnList[1], columnList[2])
+        empty_count = int(row['empty_count'])
+        gps = Gps(float(row['latitude']), float(row['longitude']))
         aggregated_parking_data = AggregatedParkingData(empty_count, gps)
         return aggregated_parking_data
 
