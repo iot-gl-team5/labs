@@ -1,5 +1,5 @@
 {
-  "USER_ID": 1,
-  "PORT": 8000,
+  "USER_ID": 777,
+  "PORT": 1883,
   "HOST": "localhost"
 }
