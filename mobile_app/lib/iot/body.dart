@@ -16,9 +16,7 @@ class _Body extends ConsumerWidget {
         child: Column(
           children: [
             TextFormField(
-              onSaved: (data) {
-                // TODO
-              },
+              onChanged: controller.onHostChanged,
               autocorrect: false,
               autofocus: true,
               keyboardType: TextInputType.text,
@@ -28,9 +26,7 @@ class _Body extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              onSaved: (data) {
-                // TODO
-              },
+              onChanged: controller.onPortChanged,
               autocorrect: false,
               autofocus: true,
               keyboardType: TextInputType.number,
@@ -60,7 +56,7 @@ class _Metrics extends StatelessWidget {
       '\nx: ${state.accelerometer?.x}\ny: ${state.accelerometer?.y}\nz: ${state.accelerometer?.z}',
     );
     final coordinates = Text(
-      '\nlon: ${state.location?.longitude}\nlat: ${state.location?.latitude}',
+      '\nlon: ${state.location?.longitude ?? 'fetching'}\nlat: ${state.location?.latitude ?? 'fetching'}',
     );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
