@@ -1,10 +1,15 @@
-class Location {
-  const Location({
-    this.longitude,
-    this.latitude,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mobile_app/utils/serializable.dart';
 
-  final double? longitude;
+part 'location.freezed.dart';
+part 'location.g.dart';
 
-  final double? latitude;
+@freezed
+class Location with _$Location implements Serializable<Location> {
+  const factory Location({
+    double? longitude,
+    double? latitude,
+  }) = _Location;
+
+  factory Location.fromJson(Map<String, dynamic> json) = _Location.fromJson;
 }
