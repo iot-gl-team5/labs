@@ -62,10 +62,11 @@ class _Metrics extends StatelessWidget {
     final coordinates = Text(
       '\nlon: ${state.location?.longitude}\nlat: ${state.location?.latitude}',
     );
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Column(children: [const Text(_accelerometerMetricText), accelerometer]),
+        const SizedBox(height: 16),
         Column(children: [const Text(_locationMetricText), coordinates])
       ],
     );
