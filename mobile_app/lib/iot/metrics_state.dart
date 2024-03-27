@@ -10,5 +10,7 @@ class MetricsState with _$MetricsState {
   const factory MetricsState({
     Accelerometer? accelerometer,
     Location? location,
+    int? port,
+    String? host,
   }) = _MetricsState;
 }
