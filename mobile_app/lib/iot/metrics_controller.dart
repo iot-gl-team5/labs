@@ -7,4 +7,8 @@ abstract class MetricsController extends StateNotifier<MetricsState> {
   void connect();
 
   void disconnect();
+
+  void onHostChanged(String text);
+
+  void onPortChanged(String text);
 }
