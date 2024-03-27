@@ -1,13 +1,19 @@
-class Accelerometer {
-  const Accelerometer({
-    required this.x,
-    required this.y,
-    required this.z,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../utils/serializable.dart';
 
-  final double x;
+part 'accelerometer.freezed.dart';
+part 'accelerometer.g.dart';
 
-  final double y;
+@freezed
+class Accelerometer
+    with _$Accelerometer
+    implements Serializable<Accelerometer> {
+  const factory Accelerometer({
+    required double x,
+    required double y,
+    required double z,
+  }) = _Accelerometer;
 
-  final double z;
+  factory Accelerometer.fromJson(Map<String, dynamic> json) =
+      _Accelerometer.fromJson;
 }
