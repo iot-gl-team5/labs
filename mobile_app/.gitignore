@@ -33,7 +33,7 @@ migrate_working_dir/
 /build/
 # Freezed generated files
 *.freezed.dart
-
+*.g.dart
 
 # Symbolication related
 app.*.symbols
