@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/web.dart';
 
 import 'iot/metrics_page.dart';
@@ -17,7 +18,10 @@ void main() {
   });
 }
 
-Widget _createApp() => const MainApp();
+Widget _createApp() => _enabledRiverpod(const MainApp());
+
+/// Enables Riverpod for the entire application
+Widget _enabledRiverpod(Widget widget) => ProviderScope(child: widget);
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
