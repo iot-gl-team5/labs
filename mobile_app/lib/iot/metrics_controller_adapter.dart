@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/web.dart';
-import 'package:mobile_app/iot/accelerometer.dart';
-import 'package:mobile_app/iot/agent_data.dart';
-import 'package:mobile_app/iot/location.dart';
-import 'package:mobile_app/iot/metrics_controller.dart';
-import 'package:mobile_app/iot/mqtt_model.dart';
-import 'package:mobile_app/utils/extensions/subscription_extension.dart';
-import 'package:mobile_app/utils/subscription_manager.dart';
+import 'accelerometer.dart';
+import 'agent_data.dart';
+import 'location.dart';
+import 'metrics_controller.dart';
+import '../utils/extensions/subscription_extension.dart';
+import '../utils/subscription_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart' as sensors;
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,7 +19,7 @@ const _userId = int.fromEnvironment(
 );
 const _topic = String.fromEnvironment(
   'TOPIC',
-  defaultValue: 'processed_agent_data_topic',
+  defaultValue: 'agent_data_topic',
 );
 const _port = int.fromEnvironment(
   'PORT',
@@ -62,7 +61,7 @@ class MetricsControllerAdapter extends MetricsController
           .where(_isLocationFetched)
           .where((_) => state.host != null)
           .where((_) => _isConnected)
-          .delay(const Duration(seconds: 1))
+          .interval(const Duration(seconds: 1))
           .listen(_handleData, onError: _handleError)
           .addToList(this);
 
@@ -83,15 +82,14 @@ class MetricsControllerAdapter extends MetricsController
       userId: _userId,
       accelerometer: accelerometer,
       gps: location,
-      timestamp: DateTime.now(),
+      timestamp: DateTime.now().toIso8601String(),
     );
 
-    // TODO: analyse road state using custom ML model.
-    final model = MqttModel(roadState: 'small pits', agentData: agentData);
+    final json = agentData.toJson();
 
     final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-    builder.addUTF8String(model.toJson().toString());
 
+    builder.addString(json);
     mqttClient.publishMessage(_topic, MqttQos.atLeastOnce, builder.payload!);
   }
 
