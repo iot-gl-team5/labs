@@ -4,7 +4,8 @@ from app.interfaces.agent_gateway import AgentGateway
 from app.entities.agent_data import AgentData, GpsData
 from app.usecases.data_processing import process_agent_data
 from app.interfaces.hub_gateway import HubGateway
-
+import numpy as np
+from keras.models import load_model
 
 class AgentMQTTAdapter(AgentGateway):
     def __init__(
@@ -23,6 +24,8 @@ class AgentMQTTAdapter(AgentGateway):
         self.client = mqtt.Client()
         # Hub
         self.hub_gateway = hub_gateway
+        # Load the model
+        self.model = load_model('model.h5')
 
     def on_connect(self, client, userdata, flags, rc):
         if rc == 0:
@@ -38,7 +41,7 @@ class AgentMQTTAdapter(AgentGateway):
             # Create AgentData instance with the received data
             agent_data = AgentData.model_validate_json(payload, strict=True)
             # Process the received data (you can call a use case here if needed)
-            processed_data = process_agent_data(agent_data)
+            processed_data = process_agent_data(agent_data, model=self.model)
             # Store the agent_data in the database (you can send it to the data processing module)
             if not self.hub_gateway.save_data(processed_data):
                 logging.error("Hub is not available")
