@@ -16,7 +16,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 const _userId = int.fromEnvironment(
   'USER_ID',
-  defaultValue: 777,
+  defaultValue: 2,
 );
 const _topic = String.fromEnvironment(
   'TOPIC',
