@@ -2,5 +2,5 @@
   "USER_ID": 2,
   "PORT": 1883,
   "HOST": "localhost",
-  "TOPIC": "processed_agent_data_topic"
+  "TOPIC": "agent_data_topic"
 }
