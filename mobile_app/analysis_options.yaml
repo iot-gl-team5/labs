@@ -1,0 +1,22 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - '**/*.freezed.dart'
+    - '**/*.g.dart'
+  errors:
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    prefer_single_quotes: true
+    prefer_relative_imports: true
+    prefer_double_quotes: false
+    always_use_package_imports: false
+
+    # Good packages document everything
+    public_member_api_docs: false
+
+    # it makes no sense now since there is no auto-sorting
+    sort_pub_dependencies: false
+
