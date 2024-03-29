@@ -80,10 +80,14 @@ class MetricsControllerAdapter extends MetricsController
 
     final agentData = AgentData(
       userId: _userId,
-      accelerometer: accelerometer,
+      accelerometer: isBad
+          ? accelerometer.copyWith(z: accelerometer.z / 1000)
+          : accelerometer,
       gps: location,
       timestamp: DateTime.now().toIso8601String(),
     );
+
+    logger.d('Z: ${agentData.accelerometer.z}');
 
     final json = agentData.toJson();
 
@@ -149,12 +153,16 @@ class MetricsControllerAdapter extends MetricsController
         longitude: position?.longitude,
       );
 
-  Accelerometer _mapToAccelerometerState(AccelerometerEvent event) =>
-      Accelerometer(
-        x: event.x,
-        y: event.y,
-        z: event.z * 1000,
-      );
+  bool isBad = true;
+
+  Accelerometer _mapToAccelerometerState(AccelerometerEvent event) {
+    if (state.isBadRoad == true) isBad = !isBad;
+    return Accelerometer(
+      x: event.x,
+      y: event.y,
+      z: event.z * (isBad ? 1000 : 1),
+    );
+  }
 
   void _handleAccelerometerData(Accelerometer event) {
     state = state.copyWith(accelerometer: event);
@@ -182,5 +190,10 @@ class MetricsControllerAdapter extends MetricsController
   @override
   void onPortChanged(String text) {
     state = state.copyWith(port: int.tryParse(text));
+  }
+
+  @override
+  void turnOnBadRoad() {
+    state = state.copyWith(isBadRoad: !(state.isBadRoad ?? false));
   }
 }

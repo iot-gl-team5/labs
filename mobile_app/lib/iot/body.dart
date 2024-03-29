@@ -38,6 +38,18 @@ class _Body extends ConsumerWidget {
             _Metrics(state: state),
             const Spacer(),
             _Actions(controller: controller),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton.icon(
+                  label: Text(
+                      'Turn ${(state.isBadRoad ?? false) ? 'off' : 'on'} bad road'),
+                  onPressed: controller.turnOnBadRoad,
+                  icon: const Icon(Icons.warning),
+                ),
+                Text('${state.isBadRoad ?? false}')
+              ],
+            )
           ],
         ),
       ),
