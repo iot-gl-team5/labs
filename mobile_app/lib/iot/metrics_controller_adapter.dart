@@ -153,7 +153,7 @@ class MetricsControllerAdapter extends MetricsController
       Accelerometer(
         x: event.x,
         y: event.y,
-        z: event.z,
+        z: event.z * 1000,
       );
 
   void _handleAccelerometerData(Accelerometer event) {
