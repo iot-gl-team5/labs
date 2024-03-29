@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mobile_app/iot/metrics_state.dart';
+import 'metrics_state.dart';
 
 abstract class MetricsController extends StateNotifier<MetricsState> {
   MetricsController(super.state);
@@ -11,4 +11,6 @@ abstract class MetricsController extends StateNotifier<MetricsState> {
   void onHostChanged(String text);
 
   void onPortChanged(String text);
+
+  void turnOnBadRoad();
 }

@@ -12,5 +12,6 @@ class MetricsState with _$MetricsState {
     Location? location,
     int? port,
     String? host,
+    bool? isBadRoad,
   }) = _MetricsState;
 }
